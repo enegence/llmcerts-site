@@ -43,6 +43,7 @@ export default function CertModal({ cert, onClose }) {
         {/* Close button */}
         <button
           onClick={onClose}
+          aria-label="Close"
           style={{
             position: 'absolute', top: 16, right: 16,
             background: '#F3F4F8', border: 'none', borderRadius: '50%',
@@ -102,8 +103,8 @@ export default function CertModal({ cert, onClose }) {
 
         {/* What's included note */}
         <div style={{
-          background: '#F5F6FF', borderRadius: 10, padding: '14px 16px',
-          marginBottom: 28, borderLeft: `3px solid ${ACCENT}`,
+          background: '#EDFAF3', borderRadius: 10, padding: '14px 16px',
+          marginBottom: 28, border: '1px solid rgba(16,185,129,0.2)',
         }}>
           <p style={{fontSize: 13, color: '#3B3F5C', lineHeight: 1.6, margin: 0}}>
             Training materials for this certification include structured study guides, flashcards, and

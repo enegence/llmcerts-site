@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLMCerts — Learn. Practice. Certify.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=Syne:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{-webkit-font-smoothing:antialiased}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:68px;border-bottom:1px solid rgba(255,255,255,0.07);transition:background 0.3s}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:14px;font-weight:500;color:rgba(255,255,255,0.75);text-decoration:none;letter-spacing:0.01em;transition:color 0.2s}
+.nav-links a:hover{color:#fff}
+.nav-actions{display:flex;align-items:center;gap:12px}
+
+.hero{padding:140px 48px 100px;text-align:center;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%)}
+.hero-content{position:relative;z-index:1;max-width:820px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid;border-radius:100px;padding:5px 14px 5px 10px;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:28px}
+.hero-dot{width:6px;height:6px;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(0.85)}}
+.hero h1{font-size:clamp(44px,6vw,72px);font-weight:700;line-height:1.1;letter-spacing:-0.03em;margin-bottom:24px;color:#fff}
+.hero-sub{font-size:18px;font-weight:400;line-height:1.65;color:rgba(255,255,255,0.62);max-width:560px;margin:0 auto 40px}
+.hero-ctas{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+
+.vendor-strip{border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);padding:20px 48px;display:flex;align-items:center;gap:0;overflow:hidden}
+.vendor-strip-label{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);white-space:nowrap;margin-right:36px;flex-shrink:0}
+
+.stats-section{background:#fff;padding:72px 48px;display:flex;justify-content:center}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);max-width:900px;width:100%;border-radius:16px;overflow:hidden}
+.stat-cell{padding:40px 32px;text-align:center;border-right:1px solid #E2E4F3}
+.stat-cell:last-child{border-right:none}
+.stat-number{font-size:42px;font-weight:700;letter-spacing:-0.03em;line-height:1;margin-bottom:8px}
+.stat-label{font-size:13px;font-weight:500}
+
+.certs-section{padding:80px 48px}
+.section-header{text-align:center;margin-bottom:56px}
+.section-eyebrow{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px}
+.section-title{font-size:clamp(28px,4vw,40px);font-weight:700;letter-spacing:-0.02em;line-height:1.2;margin-bottom:16px}
+.section-sub{font-size:16px;line-height:1.6;max-width:520px;margin:0 auto}
+
+.vendor-filter{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:44px}
+.filter-btn{font-size:13px;font-weight:500;padding:7px 16px;border-radius:100px;border:1px solid #E2E4F3;background:#fff;cursor:pointer;transition:all 0.18s}
+
+.certs-grid{display:grid;gap:16px;max-width:1200px;margin:0 auto}
+.cert-card{background:#fff;border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:14px;transition:box-shadow 0.2s,transform 0.2s;cursor:default}
+.cert-card:hover{transform:translateY(-2px)}
+.cert-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.vendor-pill{font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:100px;flex-shrink:0}
+.audience-tag{font-size:11px;font-weight:500;color:#888;background:#F3F4F8;padding:3px 8px;border-radius:4px}
+.cert-name{font-size:15px;font-weight:600;line-height:1.35;flex:1}
+.cert-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.meta-chip{font-size:11px;font-weight:500;padding:3px 9px;border-radius:4px;display:flex;align-items:center;gap:4px}
+.chip-public{background:#EDFAF3;color:#1A8F5A}
+.chip-limited{background:#FFF7ED;color:#C26A0A}
+.chip-coding{background:#EEF0FF;color:#4353D4}
+.chip-focus{background:#F5F5F5;color:#555}
+
+.how-section{padding:96px 48px;background:#fff}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px;max-width:900px;margin:0 auto;position:relative}
+.steps-grid::before{content:'';position:absolute;top:32px;left:calc(16.66% + 16px);right:calc(16.66% + 16px);height:1px;opacity:0.3}
+.step{text-align:center}
+.step-num{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;margin:0 auto 20px;position:relative;z-index:1}
+.step h3{font-size:18px;font-weight:700;margin-bottom:10px}
+.step p{font-size:14px;line-height:1.65}
+
+.cta-section{padding:100px 48px;text-align:center;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(0,0,0,0.0) 0%,transparent 70%);pointer-events:none}
+.cta-section>*{position:relative;z-index:1}
+.cta-section h2{font-size:clamp(32px,4vw,52px);font-weight:700;letter-spacing:-0.03em;line-height:1.15;margin-bottom:20px;color:#fff}
+.cta-section p{font-size:17px;color:rgba(255,255,255,0.62);margin-bottom:40px}
+
+footer{border-top:1px solid rgba(255,255,255,0.07);padding:36px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-copy{font-size:13px;color:rgba(255,255,255,0.3)}
+.footer-links{display:flex;gap:24px}
+.footer-links a{font-size:13px;color:rgba(255,255,255,0.3);text-decoration:none;transition:color 0.2s}
+.footer-links a:hover{color:rgba(255,255,255,0.7)}
+
+/* Tweaks panel */
+#tweaks-panel{position:fixed;bottom:24px;right:24px;z-index:9999;background:#fff;border:1px solid #E2E4F3;border-radius:16px;padding:20px 20px 16px;width:268px;box-shadow:0 8px 40px rgba(0,0,0,0.14);display:none;max-height:90vh;overflow-y:auto}
+#tweaks-panel.open{display:block}
+.tweaks-title{font-size:13px;font-weight:700;margin-bottom:16px;color:#0C1033;letter-spacing:0.02em;text-transform:uppercase}
+.tweak-section{margin-bottom:16px}
+.tweak-section-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;margin-bottom:8px}
+.tweak-row{margin-bottom:10px}
+.tweak-label{font-size:12px;font-weight:500;color:#666;margin-bottom:5px}
+.tweak-row select,.tweak-row input[type=range]{width:100%;border-radius:6px}
+.tweak-row select{padding:6px 8px;border:1px solid #E2E4F3;font-size:13px;background:#fff}
+.tweak-swatch{display:flex;gap:6px;flex-wrap:wrap}
+.swatch{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border-color 0.15s;box-shadow:0 0 0 1px rgba(0,0,0,0.1)}
+.swatch.sel{border-color:#000}
+.tweak-toggle{display:flex;gap:6px}
+.toggle-opt{flex:1;padding:5px;border:1px solid #E2E4F3;border-radius:6px;font-size:12px;font-weight:500;text-align:center;cursor:pointer;transition:all 0.15s;background:#fff;color:#666}
+.toggle-opt.sel{background:#0C1033;color:#fff;border-color:#0C1033}
+
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .hero{padding:120px 20px 72px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .certs-section,.how-section,.cta-section{padding:60px 20px}
+  .steps-grid{grid-template-columns:1fr}
+  .steps-grid::before{display:none}
+  footer{padding:24px 20px;flex-direction:column}
+}
+</style>
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="140" fill="#080C28"/>
+    <text x="100" y="80" text-anchor="middle" fill="#00BCD4" font-size="36" font-weight="800" font-family="sans-serif">LLM</text>
+    <circle cx="100" cy="95" r="8" fill="#00BCD4"/>
+    <path d="M93,108 L93,120 L100,115 L107,120 L107,108" fill="#00BCD4"/>
+  </svg>
+</template>
+</head>
+<body>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accentColor": "#10B981",
+  "badgeColor": "#1A1D2E",
+  "heroStyle": "slate",
+  "cardStyle": "elevated",
+  "showCodingBadge": true,
+  "showStats": false,
+  "showTagline": true,
+  "fontPairing": "ibm",
+  "btnStyle": "filled",
+  "gridCols": "auto",
+  "heroHeadline": "action",
+  "marqueeSpeed": "normal",
+  "tickerBg": "light",
+  "footerBg": "light",
+  "lavaColor": "accent"
+}/*EDITMODE-END*/;
+
+// ─── LOGO: Hexagon network + open book ───────────────────────────────────
+function LLMCertsLogo({ size = 36, darkBg = true, showText = true, badgeColor, accentColor, fontPairing }) {
+  const dark    = darkBg ? '#ffffff' : '#1A1D2E';
+  const accent  = accentColor || '#10B981';
+  const textClr = darkBg ? '#ffffff' : '#1A1D2E';
+  const tagClr  = darkBg ? 'rgba(255,255,255,0.45)' : '#888';
+  const fonts   = { grotesk:"'Space Grotesk',sans-serif", syne:"'Syne',sans-serif", ibm:"'IBM Plex Sans',sans-serif" };
+  const fontStack = fonts[fontPairing] || fonts.ibm;
+
+  const cx = 50, cy = 50, Ro = 42, Ri = 22;
+  const outerR = 6.5, innerR = 3.8;
+  const d2r = d => d * Math.PI / 180;
+
+  // Outer nodes: N1(12), N2(2), N3(4), N4(6), N5(8), N6(10) — clockwise from top
+  const O = [90, 30, -30, -90, -150, 150].map(d => ({
+    x: cx + Ro * Math.cos(d2r(d)),
+    y: cy - Ro * Math.sin(d2r(d)),
+  }));
+  // Inner nodes: N7(12), N8(2), N9(4), N10(8), N11(10) — no bottom
+  const I = [90, 30, -30, -150, 150].map(d => ({
+    x: cx + Ri * Math.cos(d2r(d)),
+    y: cy - Ri * Math.sin(d2r(d)),
+  }));
+
+  // Shorten line from (x1,y1) toward (x2,y2), stopping `stop` px from (x2,y2)
+  const short = (x1,y1,x2,y2,stop) => {
+    const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy);
+    if (len <= stop) return {x:x1, y:y1};
+    const t = (len-stop)/len;
+    return {x: x1+dx*t, y: y1+dy*t};
+  };
+  const outerGap = outerR + 2; // stop this far from outer node center
+
+  // Open book fits just inside inner cluster
+  // N9(~69,61) and N10(~31,61) → right edge 64, left edge 36, 1px gap
+  // N7(50,28) → top edge ~33
+  const bT  = {x:50, y:33};  // spine peak (top)
+  const bTR = {x:64, y:41};  // top-right
+  const bMC = {x:50, y:49};  // mid-center (spine valley)
+  const bTL = {x:36, y:41};  // top-left
+  const bBC = {x:50, y:65};  // bottom-center
+  const bBR = {x:64, y:57};  // bottom-right
+  const bBL = {x:36, y:57};  // bottom-left
+
+  const adj = (hex, amt) => {
+    const c = v => Math.max(0, Math.min(255, v));
+    return `rgb(${c(parseInt(hex.slice(1,3),16)+amt)},${c(parseInt(hex.slice(3,5),16)+amt)},${c(parseInt(hex.slice(5,7),16)+amt)})`;
+  };
+
+  return (
+    <div style={{display:'flex', alignItems:'center', gap: showText ? 10 : 0}}>
+      <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+        {/* ── OUTER HEX EDGES ── */}
+        {/* N1–N2: full dark */}
+        <line x1={O[0].x} y1={O[0].y} x2={O[1].x} y2={O[1].y} stroke={dark} strokeWidth="2.2" strokeLinecap="round"/>
+        {/* N2→N3: dark, stops 2px short of N3 */}
+        {(()=>{ const e=short(O[1].x,O[1].y,O[2].x,O[2].y,outerGap); return <line x1={O[1].x} y1={O[1].y} x2={e.x} y2={e.y} stroke={dark} strokeWidth="2.2" strokeLinecap="round"/>; })()}
+        {/* N3→N4: accent, stops 2px short of N4 */}
+        {(()=>{ const e=short(O[2].x,O[2].y,O[3].x,O[3].y,outerGap); return <line x1={O[2].x} y1={O[2].y} x2={e.x} y2={e.y} stroke={accent} strokeWidth="2.2" strokeLinecap="round"/>; })()}
+        {/* N4–N5: full dark */}
+        <line x1={O[3].x} y1={O[3].y} x2={O[4].x} y2={O[4].y} stroke={dark} strokeWidth="2.2" strokeLinecap="round"/>
+        {/* N5–N6: full dark */}
+        <line x1={O[4].x} y1={O[4].y} x2={O[5].x} y2={O[5].y} stroke={dark} strokeWidth="2.2" strokeLinecap="round"/>
+        {/* N6–N1: full dark */}
+        <line x1={O[5].x} y1={O[5].y} x2={O[0].x} y2={O[0].y} stroke={dark} strokeWidth="2.2" strokeLinecap="round"/>
+
+        {/* ── SPOKES: inner → outer, stopping 2px short of outer node ── */}
+        {/* N7→N1 */}
+        {(()=>{ const e=short(I[0].x,I[0].y,O[0].x,O[0].y,outerGap); return <line x1={I[0].x} y1={I[0].y} x2={e.x} y2={e.y} stroke={accent} strokeWidth="1.7" strokeLinecap="round"/>; })()}
+        {/* N8→N2 */}
+        {(()=>{ const e=short(I[1].x,I[1].y,O[1].x,O[1].y,outerGap); return <line x1={I[1].x} y1={I[1].y} x2={e.x} y2={e.y} stroke={accent} strokeWidth="1.7" strokeLinecap="round"/>; })()}
+        {/* N9→N3: full accent line (both nodes are accent) */}
+        <line x1={I[2].x} y1={I[2].y} x2={O[2].x} y2={O[2].y} stroke={accent} strokeWidth="1.7" strokeLinecap="round"/>
+        {/* N10→N5 */}
+        {(()=>{ const e=short(I[3].x,I[3].y,O[4].x,O[4].y,outerGap); return <line x1={I[3].x} y1={I[3].y} x2={e.x} y2={e.y} stroke={accent} strokeWidth="1.7" strokeLinecap="round"/>; })()}
+        {/* N11→N6 */}
+        {(()=>{ const e=short(I[4].x,I[4].y,O[5].x,O[5].y,outerGap); return <line x1={I[4].x} y1={I[4].y} x2={e.x} y2={e.y} stroke={accent} strokeWidth="1.7" strokeLinecap="round"/>; })()}
+
+        {/* ── INNER CONNECTIONS: N7–N8, N7–N11, N8–N9, N10–N11 ── */}
+        <line x1={I[0].x} y1={I[0].y} x2={I[1].x} y2={I[1].y} stroke={accent} strokeWidth="1.5" strokeLinecap="round"/>
+        <line x1={I[0].x} y1={I[0].y} x2={I[4].x} y2={I[4].y} stroke={accent} strokeWidth="1.5" strokeLinecap="round"/>
+        <line x1={I[1].x} y1={I[1].y} x2={I[2].x} y2={I[2].y} stroke={accent} strokeWidth="1.5" strokeLinecap="round"/>
+        <line x1={I[3].x} y1={I[3].y} x2={I[4].x} y2={I[4].y} stroke={accent} strokeWidth="1.5" strokeLinecap="round"/>
+
+        {/* ── OPEN BOOK (isometric) ── */}
+        {/* Top face — open pages, lighter */}
+        <polygon points={`${bT.x},${bT.y} ${bTR.x},${bTR.y} ${bMC.x},${bMC.y} ${bTL.x},${bTL.y}`} fill={adj(accent,55)}/>
+        {/* Left page face */}
+        <polygon points={`${bTL.x},${bTL.y} ${bMC.x},${bMC.y} ${bBC.x},${bBC.y} ${bBL.x},${bBL.y}`} fill={accent}/>
+        {/* Right page face */}
+        <polygon points={`${bMC.x},${bMC.y} ${bTR.x},${bTR.y} ${bBR.x},${bBR.y} ${bBC.x},${bBC.y}`} fill={adj(accent,-35)}/>
+        {/* Spine crease */}
+        <line x1={bT.x} y1={bT.y} x2={bMC.x} y2={bMC.y} stroke="rgba(255,255,255,0.25)" strokeWidth="1"/>
+
+        {/* ── INNER NODES (accent) ── */}
+        {I.map((p,i) => <circle key={`in${i}`} cx={p.x} cy={p.y} r={innerR} fill={accent}/>)}
+
+        {/* ── OUTER NODES: N3 is accent, rest are dark ── */}
+        {O.map((p,i) => <circle key={`on${i}`} cx={p.x} cy={p.y} r={outerR} fill={i===2 ? accent : dark}/>)}
+
+      </svg>
+
+      {showText && (
+        <div style={{display:'flex', flexDirection:'column', lineHeight:1}}>
+          <span style={{fontFamily:fontStack, fontWeight:700, fontSize:size*0.62, letterSpacing:'-0.02em', lineHeight:1, color:textClr}}>
+            LLM<span style={{color:accent}}>Certs</span>
+          </span>
+          <span style={{fontFamily:"'DM Sans',sans-serif", fontWeight:600, fontSize:size*0.19, letterSpacing:'0.13em', color:tagClr, marginTop:4, whiteSpace:'nowrap'}}>
+            LEARN · PRACTICE · CERTIFY
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── DATA ─────────────────────────────────────────────────────────────────
+const CERTS = [
+  {vendor:'OpenAI', name:'AI Foundations', audience:'General / Job-ready', availability:'Limited', coding:false, focus:'General AI / LLM'},
+  {vendor:'OpenAI', name:'OpenAI Certification', audience:'General', availability:'Limited', coding:false, focus:'General AI / Platform'},
+  {vendor:'Anthropic', name:'Claude Certified Architect, Foundations', audience:'Architects', availability:'Partner', coding:true, focus:'Claude / Architecture'},
+  {vendor:'Google', name:'Google Cloud Generative AI Leader', audience:'Business / Leadership', availability:'Public', coding:false, focus:'GenAI Strategy'},
+  {vendor:'AWS', name:'AWS Certified AI Practitioner', audience:'Foundational', availability:'Public', coding:false, focus:'AI / ML / GenAI'},
+  {vendor:'AWS', name:'AWS Certified Generative AI Developer – Professional', audience:'Developers', availability:'Public', coding:true, focus:'GenAI / Bedrock'},
+  {vendor:'GitHub', name:'GitHub Copilot Certification', audience:'Developers', availability:'Public', coding:true, focus:'Copilot / AI Coding'},
+  {vendor:'Microsoft', name:'Azure AI Fundamentals (AI-900)', audience:'Foundational', availability:'Public', coding:false, focus:'Azure AI'},
+  {vendor:'Microsoft', name:'Azure AI Engineer Associate (AI-102)', audience:'Engineers', availability:'Public', coding:true, focus:'Azure AI Engineering'},
+  {vendor:'Microsoft', name:'AI Business Professional', audience:'Business / Leaders', availability:'Public', coding:false, focus:'Business AI'},
+  {vendor:'Microsoft', name:'AI Transformation Leader', audience:'Executives', availability:'Public', coding:false, focus:'AI Transformation'},
+  {vendor:'Microsoft', name:'M365 Copilot & Agent Administration', audience:'Admins / IT', availability:'Public', coding:false, focus:'Copilot Admin'},
+  {vendor:'NVIDIA', name:'Generative AI and LLMs Associate', audience:'Practitioners', availability:'Public', coding:false, focus:'LLMs / GenAI'},
+  {vendor:'NVIDIA', name:'Generative AI LLMs Professional', audience:'Engineers', availability:'Public', coding:true, focus:'LLMs / GenAI'},
+  {vendor:'Databricks', name:'Databricks Certified Generative AI Engineer Associate', audience:'Data / AI Engineers', availability:'Public', coding:true, focus:'GenAI Engineering'},
+  {vendor:'Snowflake', name:'SnowPro Specialty: Gen AI', audience:'Data Practitioners', availability:'Public', coding:false, focus:'GenAI on Snowflake'},
+  {vendor:'IBM', name:'IBM Certified watsonx Generative AI Engineer – Associate', audience:'Engineers', availability:'Public', coding:true, focus:'watsonx / GenAI'},
+  {vendor:'Oracle', name:'Oracle Cloud Infrastructure Generative AI Professional', audience:'Engineers', availability:'Public', coding:true, focus:'OCI / GenAI'},
+  {vendor:'SAP', name:'SAP Certified – SAP Generative AI Developer', audience:'Developers', availability:'Public', coding:true, focus:'SAP / GenAI'},
+  {vendor:'Salesforce', name:'Salesforce Certified Agentforce Specialist', audience:'Admins / Builders', availability:'Public', coding:false, focus:'Agents / Salesforce'},
+  {vendor:'UiPath', name:'Agentic Automation Associate', audience:'Automation Practitioners', availability:'Public', coding:false, focus:'Agents / Automation'},
+];
+
+const VENDORS = ['All', ...Array.from(new Set(CERTS.map(c => c.vendor)))];
+
+const VENDOR_COLORS = {
+  OpenAI:'#10A37F', Anthropic:'#D97706', Google:'#4285F4', AWS:'#FF9900',
+  GitHub:'#24292E', Microsoft:'#00A4EF', NVIDIA:'#76B900', Databricks:'#FF3621',
+  Snowflake:'#29B5E8', IBM:'#1F70C1', Oracle:'#F80000', SAP:'#0FAAFF',
+  Salesforce:'#00A1E0', UiPath:'#FA4616',
+};
+
+const HERO_STYLES = {
+  navy:    { bg: '#080C28', glow: 'rgba(0,188,212,0.28)' },
+  black:   { bg: '#000000', glow: 'rgba(0,188,212,0.20)' },
+  indigo:  { bg: '#0F0B3A', glow: 'rgba(99,88,255,0.30)' },
+  slate:   { bg: '#0C1520', glow: 'rgba(0,188,212,0.22)' },
+};
+
+const HEADLINES = {
+  default: <>Master <span className="hero-accent">LLM Certifications</span><br/>From Every Major Vendor</>,
+  bold:    <>The <span className="hero-accent">One Platform</span><br/>for Every AI Cert</>,
+  action:  <>Learn. Practice.<br/><span className="hero-accent">Get Certified.</span></>,
+};
+
+const FONT_HEADS = {
+  grotesk: "'Space Grotesk', sans-serif",
+  syne:    "'Syne', sans-serif",
+  ibm:     "'IBM Plex Sans', sans-serif",
+};
+
+const MARQUEE_DURATIONS = { slow: '40s', normal: '28s', fast: '16s' };
+
+// ─── LAVA LAMP ───────────────────────────────────────────────────────────
+function LavaLamp({ bgColor, accentColor, lavaColor }) {
+  const canvasRef = useRef(null);
+  const animRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Parse accent color to rgba
+    const hexToRgb = (hex) => {
+      const r = parseInt(hex.slice(1,3),16);
+      const g = parseInt(hex.slice(3,5),16);
+      const b = parseInt(hex.slice(5,7),16);
+      return [r,g,b];
+    };
+
+    const BLOB_COLORS = {
+      accent:  () => hexToRgb(accentColor),
+      warm:    () => [255, 120, 60],
+      cool:    () => [60, 140, 255],
+      purple:  () => [160, 80, 255],
+      multi:   (i) => [[255,80,120],[80,180,255],[120,255,160],[255,200,60]][i%4],
+    };
+
+    const N = 9;
+    const blobs = Array.from({length: N}, (_, i) => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: 60 + Math.random() * 100,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.6 - 0.1,
+      phase: Math.random() * Math.PI * 2,
+      speed: 0.003 + Math.random() * 0.005,
+      colorIdx: i,
+    }));
+
+    let frame = 0;
+    const draw = () => {
+      frame++;
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      blobs.forEach(b => {
+        b.phase += b.speed;
+        b.x += b.vx + Math.sin(b.phase * 0.7) * 0.3;
+        b.y += b.vy + Math.cos(b.phase * 0.5) * 0.2;
+        // Bounce
+        if (b.x < -b.r) b.x = canvas.width + b.r;
+        if (b.x > canvas.width + b.r) b.x = -b.r;
+        if (b.y < -b.r) { b.y = -b.r; b.vy = Math.abs(b.vy) * 0.6; }
+        if (b.y > canvas.height + b.r) { b.y = canvas.height + b.r; b.vy = -Math.abs(b.vy) * 0.6; }
+        // Drift vertically
+        const midY = canvas.height / 2;
+        b.vy += (midY - b.y) * 0.00005;
+        b.vy *= 0.998;
+        b.vx *= 0.999;
+
+        const colorFn = BLOB_COLORS[lavaColor] || BLOB_COLORS.accent;
+        const [r,g,bv] = colorFn(b.colorIdx);
+        const pulsedR = b.r * (0.88 + 0.12 * Math.sin(b.phase));
+
+        const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, pulsedR);
+        grad.addColorStop(0,   `rgba(${r},${g},${bv},0.18)`);
+        grad.addColorStop(0.4, `rgba(${r},${g},${bv},0.10)`);
+        grad.addColorStop(1,   `rgba(${r},${g},${bv},0)`);
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, pulsedR, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+      });
+
+      animRef.current = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      window.removeEventListener('resize', resize);
+    };
+  }, [accentColor, lavaColor]);
+
+  return <canvas ref={canvasRef} style={{position:'absolute', inset:0, width:'100%', height:'100%', pointerEvents:'none', zIndex:0}}/>;
+}
+
+// ─── CERT CARD ────────────────────────────────────────────────────────────
+function CertCard({ cert, tweaks }) {
+  const { accentColor, cardStyle, showCodingBadge, fontPairing } = tweaks;
+  const fontHead = FONT_HEADS[fontPairing] || FONT_HEADS.grotesk;
+  const vColor = VENDOR_COLORS[cert.vendor];
+
+  const cardStyles = {
+    bordered: { border: `1px solid #E2E4F3`, boxShadow: 'none' },
+    elevated: { border: '1px solid transparent', boxShadow: '0 4px 20px rgba(0,0,0,0.09)' },
+    flat:     { border: 'none', boxShadow: 'none', background: '#F5F6FF' },
+  };
+  const hoverShadow = {
+    bordered: `0 8px 32px ${accentColor}18`,
+    elevated: `0 12px 36px rgba(0,0,0,0.14)`,
+    flat:     'none',
+  };
+
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      className="cert-card"
+      style={{
+        ...cardStyles[cardStyle] || cardStyles.bordered,
+        boxShadow: hovered ? hoverShadow[cardStyle] : (cardStyles[cardStyle] || cardStyles.bordered).boxShadow,
+        borderColor: hovered ? `${accentColor}30` : undefined,
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div className="cert-card-header">
+        <span className="vendor-pill" style={{background: vColor+'18', color: vColor}}>{cert.vendor}</span>
+        <span className="audience-tag">{cert.audience}</span>
+      </div>
+      <div className="cert-name" style={{fontFamily: fontHead, color: '#0C1033'}}>{cert.name}</div>
+      <div className="cert-meta">
+        <span className={`meta-chip ${cert.availability === 'Public' ? 'chip-public' : 'chip-limited'}`}>
+          {cert.availability === 'Public' ? '✓ Public' : '⚡ ' + cert.availability}
+        </span>
+        {showCodingBadge && cert.coding && <span className="meta-chip chip-coding">{'</>'} Dev-focused</span>}
+        <span className="meta-chip chip-focus">{cert.focus}</span>
+      </div>
+      <a href="https://train.llmcerts.com"
+        style={{
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: 13, fontWeight: 600,
+          color: tweaks.btnStyle === 'outline' ? accentColor : '#fff',
+          background: tweaks.btnStyle === 'outline' ? 'transparent' : tweaks.btnStyle === 'gradient' ? `linear-gradient(135deg, ${accentColor}, #3A4FFF)` : accentColor,
+          border: tweaks.btnStyle === 'outline' ? `1.5px solid ${accentColor}` : 'none',
+          cursor: 'pointer', padding: '9px 0',
+          borderRadius: 8, width: '100%',
+          textAlign: 'center', textDecoration: 'none',
+          display: 'block', transition: 'opacity 0.15s',
+        }}
+      >
+        Start Training →
+      </a>
+    </div>
+  );
+}
+
+// ─── APP ──────────────────────────────────────────────────────────────────
+function App() {
+  const [tweaks, setTweaks] = useState(TWEAK_DEFAULTS);
+  const [activeVendor, setActiveVendor] = useState('All');
+  const [tweaksOpen, setTweaksOpen] = useState(false);
+
+  const { accentColor, badgeColor, heroStyle, fontPairing, showStats, showTagline, gridCols, heroHeadline, marqueeSpeed, tickerBg, footerBg, lavaColor } = tweaks;
+
+  // Nav scroll state
+  const [navScrolled, setNavScrolled] = useState(false);
+  const [navHovered, setNavHovered] = useState(false);
+  const navActive = navScrolled || navHovered;
+  useEffect(() => {
+    const onScroll = () => setNavScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const hs = HERO_STYLES[heroStyle] || HERO_STYLES.navy;
+  const fontHead = FONT_HEADS[fontPairing] || FONT_HEADS.grotesk;
+
+  const filtered = activeVendor === 'All' ? CERTS : CERTS.filter(c => c.vendor === activeVendor);
+
+  const gridColsStyle = {
+    auto: 'repeat(auto-fill, minmax(300px, 1fr))',
+    two:  'repeat(2, 1fr)',
+    three:'repeat(3, 1fr)',
+    four: 'repeat(4, 1fr)',
+  }[gridCols] || 'repeat(auto-fill, minmax(300px, 1fr))';
+
+  // Tweaks protocol
+  useEffect(() => {
+    window.addEventListener('message', (e) => {
+      if (e.data?.type === '__activate_edit_mode') setTweaksOpen(true);
+      if (e.data?.type === '__deactivate_edit_mode') setTweaksOpen(false);
+    });
+    window.parent.postMessage({type:'__edit_mode_available'}, '*');
+  }, []);
+
+  const updateTweak = (key, val) => {
+    const next = {...tweaks, [key]: val};
+    setTweaks(next);
+    window.parent.postMessage({type:'__edit_mode_set_keys', edits: next}, '*');
+  };
+
+  const navBg = hs.bg + 'E0';
+
+  const Btn = ({href, primary, large, children}) => {
+    const base = {
+      fontFamily: "'DM Sans', sans-serif",
+      fontWeight: 600, fontSize: large ? 15 : 14,
+      padding: large ? '13px 28px' : '9px 20px',
+      borderRadius: 10, border: 'none', cursor: 'pointer',
+      display: 'inline-flex', alignItems: 'center', gap: 6,
+      transition: 'all 0.2s', textDecoration: 'none',
+    };
+    if (primary) {
+      const bg = tweaks.btnStyle === 'gradient'
+        ? `linear-gradient(135deg, ${accentColor}, ${accentColor}aa)`
+        : tweaks.btnStyle === 'outline' ? 'transparent' : accentColor;
+      return <a href={href} style={{...base, background: bg, color: tweaks.btnStyle === 'outline' ? accentColor : '#fff', border: tweaks.btnStyle === 'outline' ? `2px solid ${accentColor}` : 'none'}}>{children}</a>;
+    }
+    return <a href={href} style={{...base, background:'rgba(255,255,255,0.08)', color:'#fff', border:'1px solid rgba(255,255,255,0.15)'}}>{children}</a>;
+  };
+
+  return (
+    <div style={{fontFamily: "'DM Sans', sans-serif", color: '#0C1033', background: '#fff'}}>
+
+      {/* NAV */}
+      <nav
+        onMouseEnter={() => setNavHovered(true)}
+        onMouseLeave={() => setNavHovered(false)}
+        style={{
+          background: navActive ? `${hs.bg}F2` : 'transparent',
+          borderBottomColor: navActive ? 'rgba(255,255,255,0.07)' : 'transparent',
+          boxShadow: navActive ? '0 2px 24px rgba(0,0,0,0.3)' : 'none',
+          transition: 'background 0.4s, box-shadow 0.4s, border-color 0.4s',
+        }}>
+        <a href="#" className="nav-logo">
+          <LLMCertsLogo size={30} darkBg={true} showText={true} badgeColor={badgeColor === '#1A1D2E' ? '#fff' : badgeColor} accentColor={accentColor} fontPairing={fontPairing}/>
+        </a>
+        <div className="nav-links" style={{fontFamily: fontHead}}>
+          <a href="#certifications">Certifications</a>
+          <a href="#how-it-works">How It Works</a>
+          <a href="https://train.llmcerts.com">Training Portal</a>
+        </div>
+        <div className="nav-actions">
+          <a href="https://train.llmcerts.com" style={{fontFamily:"'DM Sans',sans-serif", fontSize:14, fontWeight:500, color:'rgba(255,255,255,0.8)', textDecoration:'none', padding:'8px 16px', borderRadius:8, transition:'all 0.2s'}}>Log in</a>
+          <Btn href="https://train.llmcerts.com" primary>Get Started →</Btn>
+        </div>
+      </nav>
+
+      {/* HERO */}
+      <section className="hero" style={{background: hs.bg}}>
+        <LavaLamp bgColor={hs.bg} accentColor={accentColor} lavaColor={lavaColor}/>
+        <div className="hero-grid"/>
+        <div style={{position:'absolute', inset:0, background:`radial-gradient(ellipse 70% 50% at 50% -10%, ${hs.glow} 0%, transparent 65%)`, pointerEvents:'none'}}/>
+        <div className="hero-content">
+          <div className="hero-badge" style={{background: accentColor+'22', borderColor: accentColor+'55', color: accentColor}}>
+            <span className="hero-dot" style={{background: accentColor, boxShadow:`0 0 8px ${accentColor}`}}/>
+            Wave 1 Now Live — 21 Certifications Across 14 Vendors
+          </div>
+          <style>{`.hero-accent { color: ${accentColor}; }`}</style>
+          <h1 style={{fontFamily: fontHead}}>
+            {HEADLINES[heroHeadline] || HEADLINES.default}
+          </h1>
+          <p className="hero-sub">
+            Structured training, practice exams, and study materials for every official AI certification—
+            from OpenAI and Anthropic to AWS, Google, Microsoft, and beyond.
+          </p>
+          <div className="hero-ctas">
+            <Btn href="https://train.llmcerts.com" primary large>Start Training Free →</Btn>
+            <Btn href="#certifications" large>Browse Certifications</Btn>
+          </div>
+        </div>
+      </section>
+
+      {/* VENDOR MARQUEE */}
+      {(() => {
+        const tickerColors = {
+          dark:   { bg: hs.bg === '#000000' ? '#111' : '#0E1340', text: 'rgba(255,255,255,0.4)', label: 'rgba(255,255,255,0.3)' },
+          light:  { bg: '#F5F6FF', text: '#888', label: '#bbb' },
+          accent: { bg: accentColor, text: 'rgba(255,255,255,0.85)', label: 'rgba(255,255,255,0.6)' },
+          mid:    { bg: '#1a1f3a', text: 'rgba(255,255,255,0.45)', label: 'rgba(255,255,255,0.25)' },
+        };
+        const tc = tickerColors[tweaks.tickerBg] || tickerColors.dark;
+        return (
+          <div className="vendor-strip" style={{background: tc.bg, borderTopColor: 'rgba(255,255,255,0.06)', borderBottomColor: 'rgba(255,255,255,0.06)'}}>
+            <span className="vendor-strip-label" style={{color: tc.label}}>Covering</span>
+            <div style={{overflow:'hidden', flex:1}}>
+              <div style={{display:'flex', gap:40, alignItems:'center', animation:`scrollVendors ${MARQUEE_DURATIONS[marqueeSpeed]} linear infinite`, whiteSpace:'nowrap'}}>
+                <style>{`@keyframes scrollVendors{from{transform:translateX(0)}to{transform:translateX(-50%)}}`}</style>
+                {[...VENDORS.slice(1), ...VENDORS.slice(1)].map((v,i) => (
+                  <React.Fragment key={i}>
+                    <span style={{fontFamily: fontHead, fontSize:13, fontWeight:600, color: tc.text, letterSpacing:'0.04em'}}>{v}</span>
+                    <span style={{color: tc.label.replace('0.4','0.15').replace('0.45','0.2'), fontSize:10}}>◆</span>
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* STATS */}
+      {showStats && (
+        <section className="stats-section">
+          <div className="stats-grid" style={{border: '1px solid #E2E4F3'}}>
+            {[
+              {n:'21', l:'Wave 1 Certifications'},
+              {n:'14', l:'Vendor Partners'},
+              {n:'3',  l:'Skill Levels'},
+              {n:'1',  l:'Unified Platform'},
+            ].map((s,i) => (
+              <div className="stat-cell" key={i}>
+                <div className="stat-number" style={{fontFamily: fontHead, color: accentColor}}>{s.n}</div>
+                <div className="stat-label" style={{color:'#3B3F5C'}}>{s.l}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* CERTIFICATIONS */}
+      <section className="certs-section" id="certifications" style={{background: '#F5F6FF'}}>
+        <div className="section-header">
+          <div className="section-eyebrow" style={{color: accentColor, fontFamily: fontHead}}>Wave 1 Catalog</div>
+          <h2 className="section-title" style={{fontFamily: fontHead, color:'#0C1033'}}>Official AI Certifications,<br/>All in One Place</h2>
+          <p className="section-sub" style={{color:'#3B3F5C'}}>Every certification is backed by official vendor exams. Filter by vendor to find your path.</p>
+        </div>
+
+        <div className="vendor-filter">
+          {VENDORS.map(v => (
+            <button key={v}
+              className="filter-btn"
+              style={activeVendor === v
+                ? {background: accentColor, color:'#fff', borderColor: accentColor, fontFamily:"'DM Sans',sans-serif"}
+                : {fontFamily:"'DM Sans',sans-serif", color:'#3B3F5C'}}
+              onClick={() => setActiveVendor(v)}
+            >{v}</button>
+          ))}
+        </div>
+
+        <div className="certs-grid" style={{gridTemplateColumns: gridColsStyle}}>
+          {filtered.map((cert, i) => <CertCard key={i} cert={cert} tweaks={tweaks}/>)}
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="how-section" id="how-it-works">
+        <div className="section-header">
+          <div className="section-eyebrow" style={{color: accentColor, fontFamily: fontHead}}>How It Works</div>
+          <h2 className="section-title" style={{fontFamily: fontHead, color:'#0C1033'}}>Your Certified Path to LLM Mastery</h2>
+        </div>
+        <div className="steps-grid">
+          <style>{`.steps-grid::before{background:linear-gradient(90deg,${accentColor},${accentColor}88)}`}</style>
+          {[
+            {n:'1', h:'Choose Your Cert', p:'Browse the catalog and pick the official vendor certification that aligns with your role, platform, or career goal.'},
+            {n:'2', h:'Train on the Platform', p:'Access structured study materials, flashcards, practice exams, and spaced-repetition learning on the Elite Recall engine.'},
+            {n:'3', h:'Get Certified', p:'Sit the official vendor exam with confidence. Earn your credential and prove your expertise in the fastest-moving field in tech.'},
+          ].map((s,i) => (
+            <div className="step" key={i}>
+              <div className="step-num" style={{background: accentColor+'18', border:`2px solid ${accentColor}33`, color: accentColor, fontFamily: fontHead}}>{s.n}</div>
+              <h3 style={{fontFamily: fontHead, color:'#0C1033'}}>{s.h}</h3>
+              <p style={{color:'#3B3F5C'}}>{s.p}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="cta-section" style={{background: hs.bg}}>
+        <div style={{position:'absolute', inset:0, background:`radial-gradient(ellipse 60% 70% at 50% 50%, ${accentColor}22 0%, transparent 70%)`, pointerEvents:'none'}}/>
+        <h2 style={{fontFamily: fontHead}}>Your trusted path to<br/>LLM mastery starts here.</h2>
+        <p>Join early access. Train smarter. Get certified faster.</p>
+        <div style={{display:'flex', gap:12, justifyContent:'center', flexWrap:'wrap'}}>
+          <Btn href="https://train.llmcerts.com" primary large>Go to Training Portal →</Btn>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      {(() => {
+        const footerColors = {
+          dark:   { bg: hs.bg === '#000000' ? '#111' : '#0E1340' },
+          black:  { bg: '#000' },
+          accent: { bg: accentColor },
+          light:  { bg: '#F5F6FF' },
+          navy:   { bg: '#080C28' },
+        };
+        const fc = footerColors[footerBg] || footerColors.dark;
+        const lightFoot = footerBg === 'light';
+        return (
+          <footer style={{background: fc.bg}}>
+            <LLMCertsLogo size={26} darkBg={!lightFoot} showText={true} badgeColor={lightFoot ? '#0C1033' : '#fff'} accentColor={accentColor} fontPairing={fontPairing}/>
+            <span className="footer-copy" style={{color: lightFoot ? '#888' : 'rgba(255,255,255,0.3)'}}>© 2026 LLMCerts. Powered by Elite Recall.</span>
+            <div className="footer-links">
+              <a href="#" style={{color: lightFoot ? '#888' : 'rgba(255,255,255,0.3)'}}>Privacy</a>
+              <a href="#" style={{color: lightFoot ? '#888' : 'rgba(255,255,255,0.3)'}}>Terms</a>
+              <a href="https://train.llmcerts.com" style={{color: lightFoot ? '#888' : 'rgba(255,255,255,0.3)'}}>Training Portal</a>
+            </div>
+          </footer>
+        );
+      })()}
+
+      {/* ─── TWEAKS PANEL ─────────────────────────────────────── */}
+      <div id="tweaks-panel" className={tweaksOpen ? 'open' : ''}>
+        <div className="tweaks-title">Tweaks</div>
+
+        <div className="tweak-section">
+          <div className="tweak-section-label">Brand Color</div>
+          <div className="tweak-swatch">
+            {['#00BCD4','#3A4FFF','#8B5CF6','#10B981','#F59E0B','#EF4444','#EC4899','#64748B'].map(c => (
+              <div key={c} className={`swatch${accentColor===c?' sel':''}`} style={{background:c}} onClick={()=>updateTweak('accentColor',c)}/>
+            ))}
+          </div>
+        </div>
+
+        <div className="tweak-section">
+          <div className="tweak-section-label">Badge / Icon Color</div>
+          <div className="tweak-swatch">
+            {['#1A1D2E','#0C1033','#ffffff','#00BCD4','#111827'].map(c => (
+              <div key={c} className={`swatch${badgeColor===c?' sel':''}`} style={{background:c, border: c==='#ffffff'?'1px solid #ccc':undefined}} onClick={()=>updateTweak('badgeColor',c)}/>
+            ))}
+          </div>
+        </div>
+
+        <div className="tweak-section">
+          <div className="tweak-section-label">Hero Background</div>
+          <div className="tweak-toggle">
+            {Object.keys(HERO_STYLES).map(k => (
+              <div key={k} className={`toggle-opt${heroStyle===k?' sel':''}`} onClick={()=>updateTweak('heroStyle',k)}
+                style={heroStyle===k ? {background: HERO_STYLES[k].bg, color:'#fff', borderColor: HERO_STYLES[k].bg} : {background: HERO_STYLES[k].bg+'33'}}>
+                {k}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="tweak-section">
+          <div className="tweak-section-label">Typography</div>
+          <div className="tweak-toggle">
+            {[['grotesk','Grotesk'],['syne','Syne'],['ibm','IBM']].map(([k,l]) => (
+              <div key={k} className={`toggle-opt${fontPairing===k?' sel':''}`} onClick={()=>updateTweak('fontPairing',k)}>{l}</div>
+            ))}
+          </div>
+        </div>
+
+        <div className="tweak-section">
+          <div className="tweak-section-label">Button Style</div>
+          <div className="tweak-toggle">
+            {[['filled','Filled'],['outline','Outline'],['gradient','Gradient']].map(([k,l]) => (
+              <div key={k} className={`toggle-opt${tweaks.btnStyle===k?' sel':''}`} onClick={()=>updateTweak('btnStyle',k)}>{l}</div>
+            ))}
+          </div>
+        </div>
+
+        <div className="tweak-section">
+          <div className="tweak-section-label">Card Style</div>
+          <div className="tweak-toggle">
+            {[['bordered','Border'],['elevated','Shadow'],['flat','Flat']].map(([k,l]) => (
+              <div key={k} className={`toggle-opt${tweaks.cardStyle===k?' sel':''}`} onClick={()=>updateTweak('cardStyle',k)}>{l}</div>
+            ))}
+          </div>
+        </div>
+
+        <div className="tweak-section">
+          <div className="tweak-section-label">Grid Columns</div>
+          <div className="tweak-toggle">
+            {[['auto','Auto'],['two','2'],['three','3'],['four','4']].map(([k,l]) => (
+              <div key={k} className={`toggle-opt${gridCols===k?' sel':''}`} onClick={()=>updateTweak('gridCols',k)}>{l}</div>
+            ))}
+          </div>
+        </div>
+
+        <div className="tweak-section">
+          <div className="tweak-section-label">Hero Headline</div>
+          <div className="tweak-toggle">
+            {[['default','Default'],['bold','Bold'],['action','Action']].map(([k,l]) => (
+              <div key={k} className={`toggle-opt${heroHeadline===k?' sel':''}`} onClick={()=>updateTweak('heroHeadline',k)}>{l}</div>
+            ))}
+          </div>
+        </div>
+
+        <div className="tweak-section">
+          <div className="tweak-section-label">Marquee Speed</div>
+          <div className="tweak-toggle">
+            {[['slow','Slow'],['normal','Normal'],['fast','Fast']].map(([k,l]) => (
+              <div key={k} className={`toggle-opt${tweaks.marqueeSpeed===k?' sel':''}`} onClick={()=>updateTweak('marqueeSpeed',k)}>{l}</div>
+            ))}
+          </div>
+        </div>
+
+        <div className="tweak-section">
+          <div className="tweak-section-label">Lava Lamp Color</div>
+          <div className="tweak-toggle">
+            {[['accent','Accent'],['warm','Warm'],['cool','Cool'],['purple','Purple'],['multi','Multi']].map(([k,l]) => (
+              <div key={k} className={`toggle-opt${tweaks.lavaColor===k?' sel':''}`} onClick={()=>updateTweak('lavaColor',k)}>{l}</div>
+            ))}
+          </div>
+        </div>
+
+        <div className="tweak-section">
+          <div className="tweak-section-label">Ticker Bar</div>
+          <div className="tweak-toggle">
+            {[['dark','Dark'],['mid','Mid'],['accent','Accent'],['light','Light']].map(([k,l]) => (
+              <div key={k} className={`toggle-opt${tweaks.tickerBg===k?' sel':''}`} onClick={()=>updateTweak('tickerBg',k)}>{l}</div>
+            ))}
+          </div>
+        </div>
+
+        <div className="tweak-section">
+          <div className="tweak-section-label">Footer</div>
+          <div className="tweak-toggle">
+            {[['dark','Dark'],['navy','Navy'],['black','Black'],['accent','Accent'],['light','Light']].map(([k,l]) => (
+              <div key={k} className={`toggle-opt${tweaks.footerBg===k?' sel':''}`} onClick={()=>updateTweak('footerBg',k)}>{l}</div>
+            ))}
+          </div>
+        </div>
+
+        <div className="tweak-section">
+          <div className="tweak-section-label">Show / Hide</div>
+          {[['showStats','Stats bar'],['showCodingBadge','Dev badges'],['showTagline','Tagline']].map(([k,l]) => (
+            <div key={k} className="tweak-row" style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8}}>
+              <span className="tweak-label" style={{margin:0}}>{l}</span>
+              <div className="tweak-toggle" style={{width:80}}>
+                <div className={`toggle-opt${tweaks[k]?' sel':''}`} style={{flex:1, padding:'4px 0'}} onClick={()=>updateTweak(k,true)}>On</div>
+                <div className={`toggle-opt${!tweaks[k]?' sel':''}`} style={{flex:1, padding:'4px 0'}} onClick={()=>updateTweak(k,false)}>Off</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+<div id="root"></div>
+</body>
+</html>

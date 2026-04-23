@@ -1,6 +1,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{-webkit-font-smoothing:antialiased}
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.hero-accent{color:#10B981}
 
 nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:68px;border-bottom:1px solid rgba(255,255,255,0.07);transition:background 0.3s}
 .nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
@@ -47,7 +48,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 
 .how-section{padding:96px 48px;background:#fff}
 .steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px;max-width:900px;margin:0 auto;position:relative}
-.steps-grid::before{content:'';position:absolute;top:32px;left:calc(16.66% + 16px);right:calc(16.66% + 16px);height:1px;opacity:0.3}
+.steps-grid::before{content:'';position:absolute;top:32px;left:calc(16.66% + 16px);right:calc(16.66% + 16px);height:1px;opacity:0.3;background:linear-gradient(90deg,#10B981,#10B98188)}
 .step{text-align:center}
 .step-num{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;margin:0 auto 20px;position:relative;z-index:1;font-family:'IBM Plex Sans',sans-serif}
 .step h3{font-size:18px;font-weight:700;margin-bottom:10px;font-family:'IBM Plex Sans',sans-serif;color:#0C1033}
@@ -59,10 +60,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .cta-section p{font-size:17px;color:rgba(255,255,255,0.62);margin-bottom:40px}
 
 footer{border-top:1px solid rgba(255,255,255,0.07);padding:36px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
-.footer-copy{font-size:13px;color:rgba(255,255,255,0.3)}
-.footer-links{display:flex;gap:24px}
-.footer-links a{font-size:13px;color:rgba(255,255,255,0.3);text-decoration:none;transition:color 0.2s}
-.footer-links a:hover{color:rgba(255,255,255,0.7)}
+.footer-links{display:flex;gap:24px;align-items:center}
+.footer-links a,.footer-links button{font-size:13px;color:#888;text-decoration:none;transition:color 0.2s;background:none;border:none;padding:0;cursor:pointer;font-family:inherit}
+.footer-links a:hover,.footer-links button:hover{color:#3B3F5C}
 
 @media(max-width:768px){
   nav{padding:0 20px}
