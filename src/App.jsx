@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import Logo from './components/Logo';
 import LavaLamp from './components/LavaLamp';
-import CertCard from './components/CertCard';
+import CertCatalog from './components/CertCatalog';
 import CertModal from './components/CertModal';
-import { CERTS, VENDORS } from './data/certs';
+import { VENDORS } from './data/certs';
 
 const ACCENT = '#10B981';
 const HERO_BG = '#0C1520';
@@ -40,7 +40,6 @@ function Btn({ href, primary, large, children }) {
 }
 
 export default function App() {
-  const [activeVendor, setActiveVendor] = useState('All');
   const [navScrolled, setNavScrolled] = useState(false);
   const [navHovered, setNavHovered] = useState(false);
   const [selectedCert, setSelectedCert] = useState(null);
@@ -61,8 +60,6 @@ export default function App() {
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
-  const filtered = activeVendor === 'All' ? CERTS : CERTS.filter(c => c.vendor === activeVendor);
 
   return (
     <div style={{fontFamily: "'DM Sans', sans-serif", color: '#0C1033', background: '#fff'}}>
@@ -157,8 +154,7 @@ export default function App() {
       {/* HERO */}
       <section className="hero" style={{background: HERO_BG}}>
         <LavaLamp />
-        <div className="hero-grid" />
-        <div style={{position:'absolute', inset:0, background:`radial-gradient(ellipse 70% 50% at 50% -10%, ${HERO_GLOW} 0%, transparent 65%)`, pointerEvents:'none'}} />
+<div style={{position:'absolute', inset:0, background:`radial-gradient(ellipse 70% 50% at 50% -10%, ${HERO_GLOW} 0%, transparent 65%)`, pointerEvents:'none'}} />
         <div className="hero-content">
           <div
             className="hero-badge"
@@ -186,17 +182,18 @@ export default function App() {
         className="vendor-strip"
         style={{background: '#F5F6FF', borderTopColor: 'rgba(0,0,0,0.06)', borderBottomColor: 'rgba(0,0,0,0.06)'}}
       >
-        <span className="vendor-strip-label" style={{color: '#bbb'}}>Covering</span>
         <div style={{overflow:'hidden', flex:1}}>
           <div style={{
-            display:'flex', gap:40, alignItems:'center',
-            animation:'scrollVendors 28s linear infinite',
+            display:'flex', alignItems:'center',
+            animation:'scrollVendors 60s linear infinite',
             whiteSpace:'nowrap',
+            width:'max-content',
+            willChange:'transform',
           }}>
             {[...VENDORS.slice(1), ...VENDORS.slice(1)].map((v, i) => (
-              <span key={i} style={{display:'inline-flex', alignItems:'center', gap:40}}>
+              <span key={i} style={{display:'inline-flex', alignItems:'center'}}>
                 <span style={{fontFamily: FONT, fontSize:13, fontWeight:600, color:'#888', letterSpacing:'0.04em'}}>{v}</span>
-                <span style={{color:'rgba(0,0,0,0.12)', fontSize:10}}>◆</span>
+                <span style={{color:'rgba(0,0,0,0.15)', fontSize:9, margin:'0 28px'}}>◆</span>
               </span>
             ))}
           </div>
@@ -204,34 +201,7 @@ export default function App() {
       </div>
 
       {/* CERTIFICATIONS */}
-      <section className="certs-section" id="certifications" style={{background: '#F5F6FF'}}>
-        <div className="section-header">
-          <div className="section-eyebrow" style={{color: ACCENT, fontFamily: FONT}}>Wave 1 Catalog</div>
-          <h2 className="section-title" style={{fontFamily: FONT, color:'#0C1033'}}>Official AI Certifications,<br/>All in One Place</h2>
-          <p className="section-sub" style={{color:'#3B3F5C'}}>Every certification track is based on official vendor offerings. Filter by vendor to find your path.</p>
-        </div>
-
-        <div className="vendor-filter">
-          {VENDORS.map(v => (
-            <button
-              key={v}
-              className="filter-btn"
-              style={activeVendor === v
-                ? {background: ACCENT, color:'#fff', borderColor: ACCENT}
-                : {}}
-              onClick={() => setActiveVendor(v)}
-            >
-              {v}
-            </button>
-          ))}
-        </div>
-
-        <div className="certs-grid">
-          {filtered.map((cert, i) => (
-            <CertCard key={i} cert={cert} onLearnMore={setSelectedCert} />
-          ))}
-        </div>
-      </section>
+      <CertCatalog onLearnMore={setSelectedCert} />
 
       {/* HOW IT WORKS */}
       <section className="how-section" id="how-it-works">
